@@ -1,0 +1,58 @@
+y:  19800101-20191231
+
+1. daily stock returns file 
+
+a). Ticker 
+
+Variable Name = TICKER
+The combination of ticker, exchange, and date uniquely identifies a security. A ticker may be one to three characters for NYSE and AMEX securities or four or five characters for Nasdaq securities. Nasdaq trading tickers have four base characters and a fifth character suffix that provides information about an issue's type or temporary information about an issue's status. CRSP only includes the suffix when it provides permanent descriptive information. This table describes the suffixes appearing on the CRSP file.
+Nasdaq 5th Character Suffixes
+
+Suffix	Definition
+A	Class A
+B	Class B
+F	Companies incorporated outside the US
+S	Shares of Beneficial Interest
+U	Unit
+V	When-issued
+Y	ADR
+Z	Miscellaneous common issues
+
+Occasionally Nasdaq will add two additional suffixes to the base ticker to identify certain issues. However, because the Nasdaq ticker field only allows for five characters, one letter of the base ticker will be dropped.
+
+b). trading status:
+TRDSTAT
+Trading Status is a one-character field containing the trading status of securities.
+
+Code	Status
+A	Active
+H	Halted
+S	Suspended
+X	Unknown
+
+
+c). Price
+
+Prc is the closing price or the negative bid/ask average for a trading day. If the closing price is not available on any given trading day, the number in the price field has a negative sign to indicate that it is a bid/ask average and not an actual closing price. Please note that in this field the negative sign is a symbol and that the value of the bid/ask average is not negative.
+If neither closing price nor bid/ask average is available on a date, prc is set to zero. In a monthly database, prc is the price on the last trading date of the month. The price series begins the first month-end after the security begins trading and ends the last complete month of trading.
+If the security of a company is included in the Composite Pricing network, the closing price while listed on NYSE or AMEX on a trading date is the last trading price for that day on the exchange that the security last traded.
+Similarly, highs, lows, and volumes include trades on all exchanges on which that security traded. For example, if a stock trades on both the NYSE and the PACX (Pacific Stock Exchange), and the last trade occurs on the PACX, the closing price on that day represents the closing price on the PACX, not the NYSE. Price data for Nasdaq securities comes directly from the NASD with the close of the day at 4:00 p.m. Eastern Time. Automated trades after hours on Nasdaq are counted on the next trading date, although the volumes are applied to the current date. Daily trading prices for The Nasdaq National Market securities were first reported November 1, 1982. Daily trading prices for The Nasdaq Small Cap Market were first reported June 15, 1992. prc for Nasdaq securities is always a negative bid/ask average before this time. All prices are raw prices as they were reported at the time of trading.
+
+d). factor to adjust price 
+Facpr is used to adjust stock prices after a distribution so that a comparison can be made on an equivalent basis between prices before and after the distribution. facpr equals facshr for most distribution events. There are three types of distributions where this is the case:
+
+1. Cash dividends, facpr is set to zero;
+
+2. Cases of mergers, total liquidations, or exchanges where the security disappeared, facpr is set to negative one by convention;
+
+3. For stock dividends and splits, facpr is the number of additional shares per old share issued:
+
+facpr = (s(t)-s(t'))/s(t') = (s(t)/s(t'))-1
+
+where s(t) is the number of shares outstanding, t is a date after or on the exdt for the split, and t' is a date before the split.In other less common distribution events, spin-offs and rights, facpr is not equal to facshr. facpr is defined as the divamt divided by the stock price on the exdt, (P(t)).
+
+facpr=DIVAMT/P(t)
+
+If there is no available price on the exdt, and there is a price within ten days after (P(t)), CRSP substitutes that price for (P(t)). Since only month-end prices are available on the monthly stock files, it is possible to use the facpr and the dividend amount to compute the approximate price of the underlying security on the ex-distribution date. Also for the monthly file, distributions with facpr's are in effect reinvested on the ex-distribution date and not at the end of the month. Other cases where factor to adjust price may not be equal to factor to adjust shares are issuances and offers. For issuances, facpr is set to zero. For offers, facpr is set to the percent of shares accepted multiplied by negative one.
+
+
